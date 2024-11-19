@@ -1,0 +1,17 @@
+# Given an array of positive integers arr[], return the second largest element from the array. If the second largest element doesn't exist then return -1.
+class Solution {
+    public int getSecondLargest(int[] arr) {
+        int largest = -1, secondLargest = -1;
+
+        for (int num : arr) {
+            if (num > largest) {
+                secondLargest = largest;
+                largest = num;
+            } else if (num > secondLargest && num < largest) {
+                secondLargest = num;
+            }
+        }
+
+        return secondLargest;
+    }
+}
