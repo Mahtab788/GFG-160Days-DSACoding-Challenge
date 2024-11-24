@@ -1,0 +1,24 @@
+#."Given an integer array arr[]. You need to find the maximum sum of a subarray."
+
+class Solution {
+    // arr: input array
+    // Function to find the sum of contiguous subarray with maximum sum.
+    int maxSubarraySum(int[] arr) {
+
+        // Your code here
+        int maxSum = arr[0];  // Initialize the max sum to the first element
+        int currSum = arr[0];  // Initialize the current sum to the first element
+
+        // Loop through the array starting from the second element
+        for (int i = 1; i < arr.length; i++) {
+            // Calculate the current sum: either start a new subarray or extend the current one
+            currSum = Math.max(arr[i], currSum + arr[i]);
+
+            // Update the max sum if the current sum is greater
+            maxSum = Math.max(maxSum, currSum);
+        }
+
+        return maxSum;  // Return the maximum sum found
+        
+    }
+}
