@@ -1,0 +1,54 @@
+#.Given an array of integers arr[] in a circular fashion. 
+Find the maximum subarray sum that we can get if we assume the array to be circular.
+
+class Solution {
+    // Function to find the maximum subarray sum in a non-circular array
+    public int maxSubarraySum(int arr[]) {
+        int maxSum = arr[0];
+        int currentSum = arr[0];
+        
+        for (int i = 1; i < arr.length; i++) {
+            currentSum = Math.max(arr[i], currentSum + arr[i]);
+            maxSum = Math.max(maxSum, currentSum);
+        }
+        
+        return maxSum;
+    }
+
+    // Function to find the minimum subarray sum in the array
+    public int minSubarraySum(int arr[]) {
+        int minSum = arr[0];
+        int currentSum = arr[0];
+        
+        for (int i = 1; i < arr.length; i++) {
+            currentSum = Math.min(arr[i], currentSum + arr[i]);
+            minSum = Math.min(minSum, currentSum);
+        }
+        
+        return minSum;
+    }
+
+    // Function to find the maximum circular subarray sum
+    public int circularSubarraySum(int arr[]) {
+        int totalSum = 0;
+        for (int num : arr) {
+            totalSum += num;
+        }
+
+        // Case 1: Maximum subarray sum in the normal array
+        int normalMaxSum = maxSubarraySum(arr);
+
+        // Case 2: Maximum subarray sum in the circular array
+        // This is the total sum of the array minus the minimum subarray sum
+        int minSum = minSubarraySum(arr);
+        int circularMaxSum = totalSum - minSum;
+
+        // If all elements are negative, then circularMaxSum will be 0, so we return the normal max sum
+        if (circularMaxSum == 0) {
+            return normalMaxSum;
+        }
+
+        return Math.max(normalMaxSum, circularMaxSum);
+    }
+}
+
