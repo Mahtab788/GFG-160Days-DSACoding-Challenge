@@ -1,0 +1,93 @@
+#.Given two strings, one is a text string txt and the other is a pattern string pat. 
+The task is to print the indexes of all the occurrences of the pattern string in the text string. 
+Use 0-based indexing while returning the indices. 
+Note: Return an empty list in case of no occurrences of pattern.
+
+import java.util.ArrayList;
+
+class Solution {
+    public static ArrayList<Integer> search(String pat, String txt) {
+        ArrayList<Integer> result = new ArrayList<>();
+        int m = pat.length();
+        int n = txt.length();
+
+        // Step 1: Build the LPS (Longest Prefix Suffix) array for the pattern
+        int[] lps = new int[m];
+        buildLPSArray(pat, m, lps);
+
+        // Step 2: Perform the pattern search on the text using the LPS array
+        int i = 0; // index for txt
+        int j = 0; // index for pat
+        while (i < n) {
+            if (pat.charAt(j) == txt.charAt(i)) {
+                i++;
+                j++;
+            }
+            if (j == m) { // Found a match
+                result.add(i - j);
+                j = lps[j - 1]; // Use LPS to avoid unnecessary comparisons
+            }
+            else if (i < n && pat.charAt(j) != txt.charAt(i)) {
+                if (j != 0) {
+                    j = lps[j - 1]; // Use LPS to shift pattern efficiently
+                } else {
+                    i++;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    // Step 3: Build the LPS array (Longest Prefix Suffix array)
+    private static void buildLPSArray(String pat, int m, int[] lps) {
+        int len = 0; // Length of the previous longest prefix suffix
+        int i = 1;
+
+        // The loop calculates lps[i] for i = 1 to m-1
+        while (i < m) {
+            if (pat.charAt(i) == pat.charAt(len)) {
+                len++;
+                lps[i] = len;
+                i++;
+            } else {
+                if (len != 0) {
+                    len = lps[len - 1]; // Try to use the previous LPS value
+                } else {
+                    lps[i] = 0;
+                    i++;
+                }
+            }
+        }
+    }
+}
+
+
+
+=================================================================================================
+
+
+class Solution {
+    public static ArrayList<Integer> search(String pat, String txt) {
+        ArrayList<Integer> result = new ArrayList<>();
+        int patLength = pat.length();
+        int txtLength = txt.length();
+
+        // Traverse the text string
+        for (int i = 0; i <= txtLength - patLength; i++) {
+            // Check if the substring matches the pattern
+            boolean isMatch = true;
+            for (int j = 0; j < patLength; j++) {
+                if (txt.charAt(i + j) != pat.charAt(j)) {
+                    isMatch = false;
+                    break;
+                }
+            }
+            if (isMatch) {
+                result.add(i);
+            }
+        }
+
+        return result;
+    }
+}
