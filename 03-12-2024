@@ -1,0 +1,49 @@
+#.Given a string s, the task is to find the minimum characters to be added at the front to make the string palindrome.
+
+Note: A palindrome string is a sequence of characters that reads the same forward and backward.
+
+class Solution {
+    public static int minChar(String s) {
+        int left = 0;
+        int right = s.length() - 1;
+        int end = right;
+
+        while (left < right) {
+            if (s.charAt(left) == s.charAt(right)) {
+                left++;
+                right--;
+            } else {
+                left = 0;  // Reset left
+                end--;     // Move end inward
+                right = end; // Reset right pointer
+            }
+        }
+
+        return s.length() - (end + 1);
+    }
+}
+=======================================================================================
+
+class Solution {
+    public static int minChar(String s) {
+        // Step 1: Create the modified string
+        String reversed = new StringBuilder(s).reverse().toString();
+        String combined = s + "#" + reversed;
+
+        // Step 2: Compute the KMP prefix array
+        int[] lps = new int[combined.length()];
+        for (int i = 1; i < combined.length(); i++) {
+            int j = lps[i - 1];
+            while (j > 0 && combined.charAt(i) != combined.charAt(j)) {
+                j = lps[j - 1];
+            }
+            if (combined.charAt(i) == combined.charAt(j)) {
+                j++;
+            }
+            lps[i] = j;
+        }
+
+        // Step 3: Calculate minimum characters to add
+        return s.length() - lps[combined.length() - 1];
+    }
+}
