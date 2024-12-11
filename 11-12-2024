@@ -1,0 +1,27 @@
+#.Given two sorted arrays a[] and b[] of size n and m respectively, 
+the task is to merge them in sorted order without using any extra space. Modify a[] so that 
+it contains the first n elements and modify b[] so that it contains the last m elements.
+
+
+class Solution {
+    public void mergeArrays(int[] a, int[] b) {
+        int n = a.length, m = b.length;
+        int i = n - 1, j = 0;
+
+        // Compare and swap the largest in `a[]` with the smallest in `b[]`
+        while (i >= 0 && j < m) {
+            if (a[i] > b[j]) {
+                // Swap a[i] and b[j]
+                int temp = a[i];
+                a[i] = b[j];
+                b[j] = temp;
+            }
+            i--;
+            j++;
+        }
+
+        // Sort both arrays to maintain sorted order
+        Arrays.sort(a);
+        Arrays.sort(b);
+    }
+}
