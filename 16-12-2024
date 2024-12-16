@@ -1,0 +1,48 @@
+#.Given two sorted arrays a[] and b[] and an element k, the task is to find the element that would be at the kth position of the combined sorted array.
+
+class Solution {
+    public int kthElement(int a[], int b[], int k) {
+        int n = a.length;
+        int m = b.length;
+        
+        // Ensure that a[] is the smaller array to minimize binary search range
+        if (n > m) {
+            return kthElement(b, a, k);  // Swap the arrays
+        }
+        
+        int low = 0, high = n;
+        
+        while (low <= high) {
+            int i = (low + high) / 2;  // Partition in a[]
+            int j = k - i;  // Partition in b[] such that total left elements = k
+            
+            // Adjust i and j to be within the bounds
+            if (j < 0 || j > m) {
+                if (j < 0) {
+                    high = i - 1;  // Move towards left in a[]
+                } else {
+                    low = i + 1;  // Move towards right in a[]
+                }
+                continue;  // Skip the rest of the loop
+            }
+            
+            // Check for valid partitions
+            int aLeft = (i == 0) ? Integer.MIN_VALUE : a[i - 1];  // Left element from a[]
+            int aRight = (i == n) ? Integer.MAX_VALUE : a[i];  // Right element from a[]
+            int bLeft = (j == 0) ? Integer.MIN_VALUE : b[j - 1];  // Left element from b[]
+            int bRight = (j == m) ? Integer.MAX_VALUE : b[j];  // Right element from b[]
+            
+            // Check if the partition is valid
+            if (aLeft <= bRight && bLeft <= aRight) {
+                return Math.max(aLeft, bLeft);  // Found the kth element
+            } else if (aLeft > bRight) {
+                high = i - 1;  // Move towards left in a[]
+            } else {
+                low = i + 1;  // Move towards right in a[]
+            }
+        }
+        
+        // If we reach here, the input is invalid, but this shouldn't happen as per the problem constraints.
+        return -1;
+    }
+}
