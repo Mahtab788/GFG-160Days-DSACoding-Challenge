@@ -1,0 +1,56 @@
+#.You are given an array arr[] of integers, where each element arr[i] represents the number of pages in the ith book. You also have an integer k representing the number of students. 
+The task is to allocate books to each student such that:
+
+Each student receives atleast one book.
+Each student is assigned a contiguous sequence of books.
+No book is assigned to more than one student.
+The objective is to minimize the maximum number of pages assigned to any student. In other words, out of all possible allocations, 
+find the arrangement where the student who receives the most pages still has the smallest possible maximum.
+
+Note: Return -1 if a valid assignment is not possible, and allotment should be in contiguous order (see the explanation for better understanding).
+
+
+
+
+class Solution {
+    public static int findPages(int[] arr, int k) {
+        int n = arr.length;
+        
+        // If students are more than books, allocation is impossible
+        if (k > n) return -1;
+
+        // Define the range for binary search
+        int low = Arrays.stream(arr).max().getAsInt(); // Minimum possible maximum pages
+        int high = Arrays.stream(arr).sum();          // Maximum possible maximum pages
+        int result = -1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+
+            // Feasibility Check inline
+            if (isFeasible(arr, n, k, mid)) {
+                result = mid; // Allocation possible, try for a smaller max
+                high = mid - 1;
+            } else {
+                low = mid + 1; // Allocation not possible, increase min
+            }
+        }
+
+        return result;
+    }
+
+    // Inline feasibility check for binary search
+    private static boolean isFeasible(int[] arr, int n, int k, int maxPages) {
+        int studentsRequired = 1, currentSum = 0;
+        for (int pages : arr) {
+            if (currentSum + pages > maxPages) {
+                studentsRequired++;
+                currentSum = pages;
+                if (studentsRequired > k) return false;
+            } else {
+                currentSum += pages;
+            }
+        }
+        return true;
+    }
+}
