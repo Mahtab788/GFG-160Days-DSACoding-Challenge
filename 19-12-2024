@@ -1,0 +1,26 @@
+#.Kth Missing Positive Number in a Sorted Array.
+Given a sorted array of distinct positive integers arr[], we need to find the kth positive number that is missing from arr[].  
+
+class Solution {
+    public int kthMissing(int[] arr, int k) {
+        int left = 0, right = arr.length - 1;
+
+        // Perform binary search
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            int missingCount = arr[mid] - (mid + 1);
+
+            if (missingCount < k) {
+                left = mid + 1; // Move to the right half
+            } else {
+                right = mid - 1; // Move to the left half
+            }
+        }
+
+        // After binary search, 'left' points to the first index where missingCount >= k
+        // If 'left' is out of bounds, calculate based on elements after the last array index
+        return left + k;
+    }
+}
+
+
