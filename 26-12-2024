@@ -1,0 +1,24 @@
+#.Given an array arr[] of positive integers and another integer target. Determine if there exists two distinct indices such that the sum of there elements is equals to target.
+
+class Solution {
+    boolean twoSum(int arr[], int target) {
+        // Create a HashMap to store array elements and their indices
+        HashMap<Integer, Integer> map = new HashMap<>();
+        
+        // Traverse the array
+        for (int i = 0; i < arr.length; i++) {
+            int complement = target - arr[i]; // Find the required complement
+            
+            // Check if the complement exists in the map
+            if (map.containsKey(complement)) {
+                return true; // Pair found
+            }
+            
+            // Add the current element to the map
+            map.put(arr[i], i);
+        }
+        
+        // If no pair is found, return false
+        return false;
+    }
+}
