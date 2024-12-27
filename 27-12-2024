@@ -1,0 +1,27 @@
+#.Given an array arr[] and an integer target. You have to find numbers of pairs in array arr[] which sums up to given target.
+
+
+class Solution {
+
+    int countPairs(int arr[], int target) {
+        // HashMap to store the frequency of elements
+        HashMap<Integer, Integer> map = new HashMap<>();
+        int count = 0;
+
+        // Traverse the array
+        for (int num : arr) {
+            // Calculate complement
+            int complement = target - num;
+
+            // If complement exists in the map, add its count to the result
+            if (map.containsKey(complement)) {
+                count += map.get(complement);
+            }
+
+            // Add the current element to the map with updated frequency
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        }
+
+        return count;
+    }
+}
