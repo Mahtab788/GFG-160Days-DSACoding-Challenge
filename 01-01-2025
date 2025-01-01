@@ -1,0 +1,28 @@
+#.Given an array of strings, return all groups of strings that are anagrams. 
+The groups must be created in order of their appearance in the original array. Look at the sample case for clarification.
+
+Note: The final output will be in lexicographic order.
+
+
+
+class Solution {
+    public ArrayList<ArrayList<String>> anagrams(String[] arr) {
+        // Map to group anagrams by their sorted key
+        Map<String, ArrayList<String>> map = new LinkedHashMap<>();
+
+        // Traverse the array
+        for (String str : arr) {
+            // Sort the string to generate a key
+            char[] charArray = str.toCharArray();
+            Arrays.sort(charArray);
+            String sortedKey = new String(charArray);
+
+            // Add the string to the corresponding group in the map
+            map.putIfAbsent(sortedKey, new ArrayList<>());
+            map.get(sortedKey).add(str);
+        }
+
+        // Convert map values to the result format
+        return new ArrayList<>(map.values());
+    }
+}
