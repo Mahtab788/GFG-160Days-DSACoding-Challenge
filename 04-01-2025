@@ -1,0 +1,27 @@
+#.Given an array of integers arr[] and a number k, count the number of subarrays having XOR of their elements as k.
+
+
+class Solution {
+    public long subarrayXor(int arr[], int k) {
+        Map<Integer, Integer> prefixXorCount = new HashMap<>();
+        int xor = 0;
+        long count = 0;
+
+        // Initialize with 0 XOR prefix for subarrays starting from index 0
+        prefixXorCount.put(0, 1);
+
+        for (int num : arr) {
+            xor ^= num;
+
+            // If (xor ^ k) exists in map, it means there is a subarray with XOR equal to k
+            if (prefixXorCount.containsKey(xor ^ k)) {
+                count += prefixXorCount.get(xor ^ k);
+            }
+
+            // Update the frequency of current XOR
+            prefixXorCount.put(xor, prefixXorCount.getOrDefault(xor, 0) + 1);
+        }
+
+        return count;
+    }
+}
