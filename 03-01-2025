@@ -1,0 +1,26 @@
+#.Given an unsorted array of integers, find the number of continuous subarrays having sum exactly equal to a given number k.
+
+class Solution {
+    public int countSubarrays(int arr[], int k) {
+        // Map to store cumulative sums and their frequency
+        Map<Integer, Integer> prefixSumCount = new HashMap<>();
+        prefixSumCount.put(0, 1); // Base case: a sum of zero exists once initially
+        
+        int currentSum = 0;
+        int count = 0;
+
+        for (int num : arr) {
+            currentSum += num; // Add current element to the cumulative sum
+            
+            // Check if (currentSum - k) exists in the map
+            if (prefixSumCount.containsKey(currentSum - k)) {
+                count += prefixSumCount.get(currentSum - k);
+            }
+
+            // Add/update the frequency of the currentSum in the map
+            prefixSumCount.put(currentSum, prefixSumCount.getOrDefault(currentSum, 0) + 1);
+        }
+
+        return count;
+    }
+}
