@@ -1,0 +1,25 @@
+#.Given an array arr[] and an integer target. You have to find the number of pairs in the array whose sum is strictly less than the target.
+
+
+class Solution {
+    public int countPairs(int[] arr, int target) {
+        // Sort the array
+        Arrays.sort(arr);
+        int n = arr.length;
+        int count = 0;
+
+        // Two-pointer technique
+        int left = 0, right = n - 1;
+        while (left < right) {
+            int sum = arr[left] + arr[right];
+            if (sum < target) {
+                // All pairs between left and right are valid
+                count += (right - left);
+                left++;
+            } else {
+                right--;
+            }
+        }
+        return count;
+    }
+}
