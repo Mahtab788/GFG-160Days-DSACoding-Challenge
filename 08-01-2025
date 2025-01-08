@@ -1,0 +1,29 @@
+#.Given an integer array arr[]. Find the number of triangles that can be formed with three different array elements as lengths of three sides of the triangle. 
+
+A triangle with three given sides is only possible if sum of any two sides is always greater than the third side.
+
+class Solution {
+    // Function to count the number of possible triangles.
+    static int countTriangles(int[] arr) {
+        // Step 1: Sort the array
+        Arrays.sort(arr);
+        int n = arr.length;
+        int count = 0;
+
+        // Step 2: Fix the largest side and use two-pointer technique
+        for (int i = n - 1; i >= 2; i--) {
+            int left = 0, right = i - 1;
+
+            // Step 3: Find pairs where the sum of two sides is greater than the third side
+            while (left < right) {
+                if (arr[left] + arr[right] > arr[i]) {
+                    count += right - left;
+                    right--;
+                } else {
+                    left++;
+                }
+            }
+        }
+        return count;
+    }
+}
