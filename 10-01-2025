@@ -1,0 +1,37 @@
+#.Given an integer array arr[] and a number k. Find the count of distinct elements in every window of size k in the array.
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+class Solution {
+    ArrayList<Integer> countDistinct(int arr[], int k) {
+        ArrayList<Integer> result = new ArrayList<>();
+        HashMap<Integer, Integer> map = new HashMap<>();
+        int n = arr.length;
+
+        // Fill the map with the first window of size k
+        for (int i = 0; i < k; i++) {
+            map.put(arr[i], map.getOrDefault(arr[i], 0) + 1);
+        }
+        result.add(map.size());
+
+        // Slide the window
+        for (int i = k; i < n; i++) {
+            // Remove the leftmost element of the previous window
+            int leftElement = arr[i - k];
+            if (map.get(leftElement) == 1) {
+                map.remove(leftElement);
+            } else {
+                map.put(leftElement, map.get(leftElement) - 1);
+            }
+
+            // Add the new element of the current window
+            map.put(arr[i], map.getOrDefault(arr[i], 0) + 1);
+
+            // Store the count of distinct elements in the result
+            result.add(map.size());
+        }
+
+        return result;
+    }
+}
