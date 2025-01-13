@@ -1,0 +1,28 @@
+#.Given an array arr[] of non-negative integers, where each element arr[i] represents the height of the vertical lines, find the maximum amount of water that can be contained between any two lines, together with the x-axis.
+
+Note: In the case of a single vertical line it will not be able to hold water.
+
+class Solution {
+    public int maxWater(int arr[]) {
+        int left = 0, right = arr.length - 1;
+        int maxArea = 0;
+
+        while (left < right) {
+            // Calculate the area with the current left and right pointers
+            int width = right - left;
+            int height = Math.min(arr[left], arr[right]);
+            int area = width * height;
+            
+            // Update maxArea if we found a larger area
+            maxArea = Math.max(maxArea, area);
+
+            // Move the pointer pointing to the shorter line towards the other pointer
+            if (arr[left] < arr[right]) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        return maxArea;
+    }
+}
