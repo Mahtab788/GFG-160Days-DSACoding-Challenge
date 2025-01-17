@@ -1,0 +1,24 @@
+#.Given an array, arr[] construct a product array, res[] where each element in res[i] is the product of all elements in arr[] except arr[i]. Return this resultant array, res[].
+Note: Each element is res[] lies inside the 32-bit integer range.
+
+class Solution {
+    public static int[] productExceptSelf(int arr[]) {
+        int n = arr.length;
+        int[] res = new int[n];
+
+        // Step 1: Calculate the left product and store in res[]
+        res[0] = 1;  // Initialize the first element as 1 (no elements on the left)
+        for (int i = 1; i < n; i++) {
+            res[i] = res[i - 1] * arr[i - 1];
+        }
+
+        // Step 2: Calculate the right product and update res[] in place
+        int rightProduct = 1;  // Initialize the right product as 1 (no elements on the right)
+        for (int i = n - 1; i >= 0; i--) {
+            res[i] = res[i] * rightProduct;
+            rightProduct *= arr[i];  // Update rightProduct for the next iteration
+        }
+
+        return res;
+    }
+}
