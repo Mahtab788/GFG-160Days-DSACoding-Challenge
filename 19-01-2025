@@ -1,0 +1,35 @@
+#.Given the head of a singly linked list, your task is to left rotate the linked list k times.
+class Solution {
+    public Node rotate(Node head, int k) {
+        if (head == null || head.next == null || k == 0) {
+            return head; // No rotation needed
+        }
+
+        // Step 1: Compute the length of the linked list
+        Node temp = head;
+        int length = 1;
+        while (temp.next != null) {
+            temp = temp.next;
+            length++;
+        }
+
+        // Step 2: Optimize k to avoid unnecessary rotations
+        k = k % length;
+        if (k == 0) return head; // No rotation needed
+
+        // Step 3: Make the list circular
+        temp.next = head;
+
+        // Step 4: Traverse to the new tail (length - k-th node)
+        Node newTail = head;
+        for (int i = 1; i < length - k; i++) {
+            newTail = newTail.next;
+        }
+
+        // Step 5: Set the new head and break the cycle
+        Node newHead = newTail.next;
+        newTail.next = null;
+
+        return newHead;
+    }
+}
