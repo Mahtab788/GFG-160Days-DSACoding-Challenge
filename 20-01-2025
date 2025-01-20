@@ -1,0 +1,39 @@
+#.Given the head of two sorted linked lists consisting of nodes respectively. The task is to merge both lists and return the head of the sorted merged list.
+
+class Solution {
+    Node sortedMerge(Node head1, Node head2) {
+        // If one of the lists is empty, return the other
+        if (head1 == null) return head2;
+        if (head2 == null) return head1;
+
+        // Ensure head1 starts with the smaller value
+        if (head1.data > head2.data) {
+            Node temp = head1;
+            head1 = head2;
+            head2 = temp;
+        }
+
+        // Track the start of the merged list
+        Node mergedHead = head1;
+
+        while (head1 != null && head2 != null) {
+            Node temp = null;
+
+            // Traverse nodes in head1 until head2's data is smaller
+            while (head1 != null && head1.data <= head2.data) {
+                temp = head1;
+                head1 = head1.next;
+            }
+
+            // Link the last sorted node from head1 to the head2 node
+            temp.next = head2;
+
+            // Swap head1 and head2 to maintain the smaller-first invariant
+            Node swapTemp = head1;
+            head1 = head2;
+            head2 = swapTemp;
+        }
+
+        return mergedHead;
+    }
+}
