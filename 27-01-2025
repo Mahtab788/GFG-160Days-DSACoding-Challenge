@@ -1,0 +1,103 @@
+#.Design a data structure that works like a LRU Cache. Here cap denotes the capacity of the cache and Q denotes the number of queries. Query can be of two types:
+
+PUT x y: sets the value of the key x with value y
+GET x: gets the key of x if present else returns -1.
+The LRUCache class has two methods get() and put() which are defined as follows.
+
+get(key): returns the value of the key if it already exists in the cache otherwise returns -1.
+put(key, value): if the key is already present, update its value. If not present, add the key-value pair to the cache. 
+If the cache reaches its capacity it should remove the least recently used item before inserting the new item.
+In the constructor of the class the capacity of the cache should be initialized.
+
+
+
+class LRUCache {
+    // Doubly Linked List Node
+    class Node {
+        int key;
+        int value;
+        Node prev, next;
+        Node(int key, int value) {
+            this.key = key;
+            this.value = value;
+        }
+    }
+
+    private Map<Integer, Node> cache;  // HashMap to store key to node mapping
+    private int capacity;
+    private Node head, tail;
+
+    // Constructor to initialize the cache with a given capacity
+    LRUCache(int cap) {
+        this.capacity = cap;
+        cache = new HashMap<>();
+        
+        // Initialize dummy head and tail nodes
+        head = new Node(-1, -1);  // dummy head
+        tail = new Node(-1, -1);  // dummy tail
+        
+        // Connect head and tail
+        head.next = tail;
+        tail.prev = head;
+    }
+
+    // Get the value for the given key if present in the cache
+    public int get(int key) {
+        if (!cache.containsKey(key)) {
+            return -1;  // Key not found
+        }
+
+        // Move the accessed node to the front (most recently used)
+        Node node = cache.get(key);
+        moveToFront(node);
+        return node.value;
+    }
+
+    // Put a key-value pair in the cache
+    public void put(int key, int value) {
+        if (cache.containsKey(key)) {
+            // Update the value if the key exists
+            Node node = cache.get(key);
+            node.value = value;
+            moveToFront(node);
+        } else {
+            // If the cache is at capacity, remove the least recently used node
+            if (cache.size() == capacity) {
+                removeLRU();
+            }
+
+            // Add a new node at the front (most recently used)
+            Node newNode = new Node(key, value);
+            cache.put(key, newNode);
+            addToFront(newNode);
+        }
+    }
+
+    // Helper method to move a node to the front (most recently used)
+    private void moveToFront(Node node) {
+        removeNode(node);
+        addToFront(node);
+    }
+
+    // Helper method to add a node to the front of the list
+    private void addToFront(Node node) {
+        node.next = head.next;
+        node.prev = head;
+        head.next.prev = node;
+        head.next = node;
+    }
+
+    // Helper method to remove a node from the list
+    private void removeNode(Node node) {
+        node.prev.next = node.next;
+        node.next.prev = node.prev;
+    }
+
+    // Helper method to remove the least recently used node (tail.prev)
+    private void removeLRU() {
+        Node lru = tail.prev;
+        removeNode(lru);
+        cache.remove(lru.key);
+    }
+}
+
