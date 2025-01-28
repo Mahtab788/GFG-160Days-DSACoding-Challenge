@@ -1,0 +1,43 @@
+#.Given a string s, which may contain duplicate characters, your task is to generate and return an array of all unique permutations of the string. You can return your answer in any order.
+
+class Solution {
+    public ArrayList<String> findPermutation(String s) {
+        ArrayList<String> result = new ArrayList<>();
+        char[] chars = s.toCharArray();
+        Arrays.sort(chars); // Sort the characters to handle duplicates
+        
+        // Start backtracking to generate permutations
+        backtrack(result, new StringBuilder(), chars, new boolean[s.length()]);
+        
+        return result;
+    }
+
+    private void backtrack(ArrayList<String> result, StringBuilder current, char[] chars, boolean[] used) {
+        // If the current string is of the same length as the input string, add it to the result
+        if (current.length() == chars.length) {
+            result.add(current.toString());
+            return;
+        }
+
+        for (int i = 0; i < chars.length; i++) {
+            // Skip used characters
+            if (used[i]) continue;
+            
+            // Skip duplicates (if the current character is the same as the previous and hasn't been used yet)
+            if (i > 0 && chars[i] == chars[i - 1] && !used[i - 1]) continue;
+            
+            // Mark this character as used
+            used[i] = true;
+            
+            // Add the current character to the result string
+            current.append(chars[i]);
+            
+            // Recurse with the next character
+            backtrack(result, current, chars, used);
+            
+            // Backtrack, remove the current character and mark it as unused
+            current.deleteCharAt(current.length() - 1);
+            used[i] = false;
+        }
+    }
+}
