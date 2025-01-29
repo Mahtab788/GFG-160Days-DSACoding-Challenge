@@ -1,0 +1,35 @@
+#.mplement the function power(b, e), which calculates b raised to the power of e (i.e. be).
+
+class Solution {
+    public double power(double b, int e) {
+        // Handling the edge case where e is 0
+        if (e == 0) {
+            return 1;
+        }
+
+        // Handle negative exponent by converting b to 1/b and making e positive
+        if (e < 0) {
+            b = 1 / b;
+            e = -e;
+        }
+
+        // Perform exponentiation by squaring
+        return quickPower(b, e);
+    }
+
+    private double quickPower(double b, int e) {
+        // Base case: b^0 = 1
+        if (e == 0) {
+            return 1;
+        }
+
+        // Recursive calculation: calculate b^(e/2) first
+        double half = quickPower(b, e / 2);
+        
+        if (e % 2 == 0) {
+            return half * half; // If e is even, b^e = (b^(e/2))^2
+        } else {
+            return half * half * b; // If e is odd, b^e = (b^(e/2))^2 * b
+        }
+    }
+}
