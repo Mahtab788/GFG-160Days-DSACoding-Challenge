@@ -1,0 +1,39 @@
+#.You are given a two-dimensional mat[][] of size n*m containing English alphabets and a string word. Check if the word exists on the mat. 
+The word can be constructed by using letters from adjacent cells, either horizontally or vertically. The same cell cannot be used more than once.
+
+class Solution {
+    static public boolean isWordExist(char[][] mat, String word) {
+        int n = mat.length, m = mat[0].length;
+        
+        // Try starting DFS from every cell
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (mat[i][j] == word.charAt(0)) {
+                    if (dfs(mat, word, 0, i, j, new boolean[n][m])) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private static boolean dfs(char[][] mat, String word, int index, int i, int j, boolean[][] visited) {
+        if (index == word.length()) return true;  // All characters found
+        if (i < 0 || i >= mat.length || j < 0 || j >= mat[0].length || visited[i][j] || mat[i][j] != word.charAt(index)) {
+            return false;
+        }
+        
+        visited[i][j] = true; // Mark cell as visited
+        
+        // Explore all four possible directions
+        boolean found = dfs(mat, word, index + 1, i + 1, j, visited) ||  // Down
+                        dfs(mat, word, index + 1, i - 1, j, visited) ||  // Up
+                        dfs(mat, word, index + 1, i, j + 1, visited) ||  // Right
+                        dfs(mat, word, index + 1, i, j - 1, visited);    // Left
+        
+        visited[i][j] = false; // Backtrack
+        
+        return found;
+    }
+}
