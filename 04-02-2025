@@ -1,0 +1,36 @@
+#.Given a binary tree, the diameter (also known as the width) is defined as the number of edges on the longest path between two leaf nodes in the tree. 
+This path may or may not pass through the root. Your task is to find the diameter of the tree.
+
+class Solution {
+    // Helper function to calculate the height and diameter at the same time
+    int diameter(Node root) {
+        // Variable to store the maximum diameter
+        int[] maxDiameter = new int[1];
+        
+        // Helper function to compute the height of the tree
+        // and update the maximum diameter
+        height(root, maxDiameter);
+        
+        return maxDiameter[0];
+    }
+    
+    // Function to compute height of the tree while updating the maxDiameter
+    int height(Node node, int[] maxDiameter) {
+        if (node == null) {
+            return 0;
+        }
+        
+        // Recursively find the height of the left and right subtrees
+        int leftHeight = height(node.left, maxDiameter);
+        int rightHeight = height(node.right, maxDiameter);
+        
+        // Calculate the diameter at this node
+        int currentDiameter = leftHeight + rightHeight;
+        
+        // Update the maximum diameter found so far
+        maxDiameter[0] = Math.max(maxDiameter[0], currentDiameter);
+        
+        // Return the height of the current node
+        return Math.max(leftHeight, rightHeight) + 1;
+    }
+}
