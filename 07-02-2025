@@ -1,0 +1,30 @@
+#.Given a Binary Tree, your task is to return its In-Order Traversal.
+
+An inorder traversal first visits the left child (including its entire subtree), then visits the node, and finally visits the right child (including its entire subtree).
+
+class Solution {
+    // Function to return a list containing the inorder traversal of the tree.
+    ArrayList<Integer> inOrder(Node root) {
+        ArrayList<Integer> result = new ArrayList<>();
+        inOrderTraversal(root, result);
+        return result;
+    }
+
+    // Helper recursive function to perform in-order traversal
+    private void inOrderTraversal(Node root, ArrayList<Integer> result) {
+        if (root == null) {
+            return;
+        }
+        
+        // Traverse left subtree
+        inOrderTraversal(root.left, result);
+        
+        // Visit the node (process current node)
+        result.add(root.data);
+        
+        // Traverse right subtree
+        inOrderTraversal(root.right, result);
+    }
+
+   
+}
