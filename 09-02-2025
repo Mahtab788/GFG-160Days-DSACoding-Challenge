@@ -1,0 +1,23 @@
+#Given a binary tree, the task is to find the maximum path sum. The path may start and end at any node in the tree.
+class Solution {
+    int maxSum = Integer.MIN_VALUE; // To store the maximum path sum
+
+    public int findMaxSum(Node root) {
+        maxPathDown(root); // Helper function to compute max sum
+        return maxSum;
+    }
+
+    private int maxPathDown(Node node) {
+        if (node == null) return 0;
+
+        // Compute max sum in left & right subtree, ignore negative sums
+        int leftSum = Math.max(0, maxPathDown(node.left));
+        int rightSum = Math.max(0, maxPathDown(node.right));
+
+        // Update maxSum considering current node as the highest point
+        maxSum = Math.max(maxSum, node.data + leftSum + rightSum);
+
+        // Return max sum path that can be extended upwards
+        return node.data + Math.max(leftSum, rightSum);
+    }
+}
