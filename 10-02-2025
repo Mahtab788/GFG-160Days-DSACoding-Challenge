@@ -1,0 +1,41 @@
+#.Given a binary tree and an integer k, determine the number of downward-only paths where the sum of the node values in the path equals k. 
+A path can start and end at any node within the tree but must always move downward (from parent to child).
+
+class Solution {
+    // HashMap to store the frequency of path sums
+    private HashMap<Integer, Integer> pathSumCount;
+
+    public int sumK(Node root, int k) {
+        pathSumCount = new HashMap<>();
+        // Initialize path sum count to include the sum of 0, which represents no path sum
+        pathSumCount.put(0, 1);
+        
+        return countPaths(root, 0, k);
+    }
+
+    // Helper function to calculate the number of paths with sum k
+    private int countPaths(Node node, int currentSum, int k) {
+        // Base case: if node is null, no path to process
+        if (node == null) {
+            return 0;
+        }
+
+        // Update the current path sum
+        currentSum += node.data;
+        
+        // Get the number of paths that sum to k by checking if (currentSum - k) exists in pathSumCount
+        int result = pathSumCount.getOrDefault(currentSum - k, 0);
+
+        // Update the path sum count map: increment the count for the current sum
+        pathSumCount.put(currentSum, pathSumCount.getOrDefault(currentSum, 0) + 1);
+
+        // Recurse to the left and right children
+        result += countPaths(node.left, currentSum, k);
+        result += countPaths(node.right, currentSum, k);
+
+        // Decrement the current path sum from the map as we are backtracking
+        pathSumCount.put(currentSum, pathSumCount.get(currentSum) - 1);
+
+        return result;
+    }
+}
