@@ -1,0 +1,29 @@
+#.Given the root of a binary tree. Check whether it is a BST or not.
+Note: We are considering that BSTs can not contain duplicate Nodes.
+A BST is defined as follows:
+
+The left subtree of a node contains only nodes with keys less than the node's key.
+The right subtree of a node contains only nodes with keys greater than the node's key.
+Both the left and right subtrees must also be binary search trees.
+
+class Solution {
+    // Function to check whether a Binary Tree is BST or not.
+    boolean isBST(Node root) {
+        return isValidBST(root, Long.MIN_VALUE, Long.MAX_VALUE);
+    }
+
+    private boolean isValidBST(Node node, long min, long max) {
+        // Base case: if node is null, it's a valid BST
+        if (node == null) {
+            return true;
+        }
+
+        // If node's value is out of the valid range, return false
+        if (node.data <= min || node.data >= max) {
+            return false;
+        }
+
+        // Recursively check left and right subtrees with updated ranges
+        return isValidBST(node.left, min, node.data) && isValidBST(node.right, node.data, max);
+    }
+}
