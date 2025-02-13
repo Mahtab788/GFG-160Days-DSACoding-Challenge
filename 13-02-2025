@@ -1,0 +1,24 @@
+#.Given a Binary Search Tree(BST) and a target. Check whether there's a pair of Nodes in the BST with value summing up to the target. 
+
+class Solution {
+    boolean findTarget(Node root, int target) {
+        HashSet<Integer> set = new HashSet<>();
+        return inorder(root, set, target);
+    }
+
+    private boolean inorder(Node root, HashSet<Integer> set, int target) {
+        if (root == null) return false;
+
+        // Check left subtree
+        if (inorder(root.left, set, target)) return true;
+
+        // Check if (target - currentNode) exists in the set
+        if (set.contains(target - root.data)) return true;
+
+        // Add current node value to the set
+        set.add(root.data);
+
+        // Check right subtree
+        return inorder(root.right, set, target);
+    }
+}
