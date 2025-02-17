@@ -1,0 +1,31 @@
+#.Given an array arr[] of positive integers and an integer k, Your task is to return k largest elements in decreasing order. 
+
+import java.util.*;
+
+class Solution {
+    public ArrayList<Integer> kLargest(int[] arr, int k) {
+        // Min-heap to store the k largest elements
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>(k);
+        
+        // Process each element in the array
+        for (int num : arr) {
+            minHeap.offer(num); // Add the element to the heap
+            
+            // If heap size exceeds k, remove the smallest element (root of the heap)
+            if (minHeap.size() > k) {
+                minHeap.poll();
+            }
+        }
+        
+        // Extract elements from the heap and store them in result
+        ArrayList<Integer> result = new ArrayList<>();
+        while (!minHeap.isEmpty()) {
+            result.add(minHeap.poll());
+        }
+        
+        // Reverse the result to get elements in decreasing order
+        Collections.reverse(result);
+        
+        return result;
+    }
+}
