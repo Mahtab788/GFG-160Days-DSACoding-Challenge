@@ -1,0 +1,68 @@
+#.Given q queries, You task is to implement the following four functions for a stack:
+
+push(x) – Insert an integer x onto the stack.
+pop() – Remove the top element from the stack.
+peek() - Return the top element from the stack. If the stack is empty, return -1.
+getMin() – Retrieve the minimum element from the stack in O(1) time. If the stack is empty, return -1.
+Each query can be one of the following:
+
+1 x : Push x onto the stack.
+2 : Pop the top element from the stack.
+3: Return the top element from the stack. If the stack is empty, return -1.
+4: Return the minimum element from the stack.
+
+
+class Solution {
+    private Stack<Integer> stack;
+    private Stack<Integer> minStack;
+
+    public Solution() {
+        stack = new Stack<>();
+        minStack = new Stack<>();
+    }
+
+    public void push(int x) {
+        stack.push(x);
+        if (minStack.isEmpty() || x <= minStack.peek()) {
+            minStack.push(x);
+        }
+    }
+
+    public void pop() {
+        if (!stack.isEmpty()) {
+            if (stack.peek().equals(minStack.peek())) {
+                minStack.pop();
+            }
+            stack.pop();
+        }
+    }
+
+    public int peek() {
+        return stack.isEmpty() ? -1 : stack.peek();
+    }
+
+    public int getMin() {
+        return minStack.isEmpty() ? -1 : minStack.peek();
+    }
+
+    // Function to process queries
+    public static List<Integer> processQueries(int q, int[][] queries) {
+        Solution stack = new Solution();
+        List<Integer> result = new ArrayList<>();
+
+        for (int[] query : queries) {
+            int type = query[0];
+            if (type == 1) { // Push operation
+                stack.push(query[1]);
+            } else if (type == 2) { // Pop operation
+                stack.pop();
+            } else if (type == 3) { // Peek operation
+                result.add(stack.peek());
+            } else if (type == 4) { // Get minimum operation
+                result.add(stack.getMin());
+            }
+        }
+        return result;
+    }
+
+}
