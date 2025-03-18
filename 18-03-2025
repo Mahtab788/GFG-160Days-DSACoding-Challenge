@@ -1,0 +1,33 @@
+#.Given an array arr[], determine if it can be partitioned into two subsets such that the sum of elements in both parts is the same.
+
+Note: Each element must be in exactly one subset.
+
+class Solution {
+    public static boolean equalPartition(int arr[]) {
+        int n = arr.length;
+        int sum = 0;
+        
+        // Compute the total sum of the array
+        for (int num : arr) {
+            sum += num;
+        }
+        
+        // If sum is odd, it's impossible to partition it equally
+        if (sum % 2 != 0) {
+            return false;
+        }
+        
+        int target = sum / 2;
+        boolean[] dp = new boolean[target + 1];
+        dp[0] = true; // Base case: subset sum 0 is always possible
+
+        // Process each element in the array
+        for (int num : arr) {
+            for (int j = target; j >= num; j--) {
+                dp[j] = dp[j] || dp[j - num]; // Include current number or not
+            }
+        }
+
+        return dp[target];
+    }
+}
