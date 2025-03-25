@@ -1,0 +1,64 @@
+#.You are given a boolean expression s containing
+    'T' ---> true
+    'F' ---> false 
+and following operators between symbols
+   &   ---> boolean AND
+    |   ---> boolean OR
+   ^   ---> boolean XOR
+Count the number of ways we can parenthesize the expression so that the value of expression evaluates to true.
+
+Note: The answer is guaranteed to fit within a 32-bit integer.
+
+class Solution {
+    static int countWays(String s) {
+        int n = s.length();
+        
+        // dpTrue[i][j] stores the number of ways to evaluate s[i...j] to True
+        int[][] dpTrue = new int[n][n];
+        // dpFalse[i][j] stores the number of ways to evaluate s[i...j] to False
+        int[][] dpFalse = new int[n][n];
+        
+        // Base case: single characters
+        for (int i = 0; i < n; i++) {
+            if (s.charAt(i) == 'T') {
+                dpTrue[i][i] = 1;
+                dpFalse[i][i] = 0;
+            } else if (s.charAt(i) == 'F') {
+                dpTrue[i][i] = 0;
+                dpFalse[i][i] = 1;
+            }
+        }
+        
+        // Fill the dp tables for substrings of increasing length
+        for (int len = 3; len <= n; len += 2) { // Lengths of sub-expressions: 3, 5, 7, ..., n
+            for (int i = 0; i <= n - len; i++) {
+                int j = i + len - 1;
+                
+                // Evaluate dpTrue[i][j] and dpFalse[i][j] by trying every operator
+                for (int k = i + 1; k < j; k += 2) { // k is the index of operators
+                    char operator = s.charAt(k);
+                    
+                    // Compute the number of ways to get True and False for the current sub-expression
+                    int leftTrue = dpTrue[i][k - 1];
+                    int leftFalse = dpFalse[i][k - 1];
+                    int rightTrue = dpTrue[k + 1][j];
+                    int rightFalse = dpFalse[k + 1][j];
+                    
+                    if (operator == '&') {
+                        dpTrue[i][j] += leftTrue * rightTrue;
+                        dpFalse[i][j] += leftTrue * rightFalse + leftFalse * rightTrue + leftFalse * rightFalse;
+                    } else if (operator == '|') {
+                        dpTrue[i][j] += leftTrue * rightTrue + leftTrue * rightFalse + leftFalse * rightTrue;
+                        dpFalse[i][j] += leftFalse * rightFalse;
+                    } else if (operator == '^') {
+                        dpTrue[i][j] += leftTrue * rightFalse + leftFalse * rightTrue;
+                        dpFalse[i][j] += leftTrue * rightTrue + leftFalse * rightFalse;
+                    }
+                }
+            }
+        }
+        
+        // The answer is the number of ways to evaluate the whole expression s[0...n-1] to True
+        return dpTrue[0][n - 1];
+    }
+}
