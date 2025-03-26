@@ -3,58 +3,37 @@
 More formally, for each window size k, determine the smallest element in all windows of size k, and then find the largest value among these minimums where 1<=k<=arr.size().
 
 
-
 class Solution {
-    public static ArrayList<Integer> maxOfMins(int[] arr) {
-        int n = arr.length;
-        int[] left = new int[n];  // Stores left boundaries
-        int[] right = new int[n]; // Stores right boundaries
-        int[] res = new int[n];   // Stores the final result
+    public boolean wordBreak(String s, String[] dictionary) {
+        // Convert the dictionary array to a HashSet for O(1) lookups
+        HashSet<String> wordSet = new HashSet<>();
+        int maxWordLength = 0;
+        
+        // Store all words in the dictionary and find the maximum word length
+        for (String word : dictionary) {
+            wordSet.add(word);
+            maxWordLength = Math.max(maxWordLength, word.length());
+        }
 
-        Stack<Integer> stack = new Stack<>();
+        // DP array where dp[i] is true if s[0...i-1] can be formed
+        int n = s.length();
+        boolean[] dp = new boolean[n + 1];
+        
+        // Base case: empty string can always be formed
+        dp[0] = true;
 
-        // Compute previous smaller elements (left boundary)
-        for (int i = 0; i < n; i++) {
-            while (!stack.isEmpty() && arr[stack.peek()] >= arr[i]) {
-                stack.pop();
+        // Iterate through each position in the string s
+        for (int i = 1; i <= n; i++) {
+            // Check only up to the maximum word length to avoid unnecessary checks
+            for (int j = Math.max(0, i - maxWordLength); j < i; j++) {
+                if (dp[j] && wordSet.contains(s.substring(j, i))) {
+                    dp[i] = true;
+                    break;  // Once we find a valid word, no need to check further
+                }
             }
-            left[i] = stack.isEmpty() ? -1 : stack.peek();
-            stack.push(i);
         }
 
-        // Clear stack for next computation
-        stack.clear();
-
-        // Compute next smaller elements (right boundary)
-        for (int i = n - 1; i >= 0; i--) {
-            while (!stack.isEmpty() && arr[stack.peek()] >= arr[i]) {
-                stack.pop();
-            }
-            right[i] = stack.isEmpty() ? n : stack.peek();
-            stack.push(i);
-        }
-
-        // Fill res[] using derived window sizes
-        for (int i = 0; i < n; i++) {
-            int windowSize = right[i] - left[i] - 1;
-            res[windowSize - 1] = Math.max(res[windowSize - 1], arr[i]);
-        }
-
-        // Propagate values to maintain decreasing order
-        for (int i = n - 2; i >= 0; i--) {
-            res[i] = Math.max(res[i], res[i + 1]);
-        }
-
-        // Convert to ArrayList and return
-        ArrayList<Integer> result = new ArrayList<>();
-        for (int val : res) {
-            result.add(val);
-        }
-        return result;
-    }
-
-    public static void main(String[] args) {
-        int[] arr = {10, 20, 30, 50, 10, 70, 30};
-        System.out.println(maxOfMins(arr)); // Output: [70, 30, 20, 10, 10, 10, 10]
+        // Return whether the entire string can be formed
+        return dp[n];
     }
 }
