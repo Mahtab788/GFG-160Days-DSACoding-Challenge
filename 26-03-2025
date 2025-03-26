@@ -1,0 +1,36 @@
+#.You are given a string s and a list dictionary[] of words. Your task is to determine whether the string s can be formed by concatenating one or more words from the dictionary[].
+
+Note: From dictionary[], any word can be taken any number of times and in any order.
+
+
+class Solution {
+    public boolean wordBreak(String s, String[] dictionary) {
+        // Convert the dictionary array into a set for fast lookup
+        HashSet<String> wordSet = new HashSet<>();
+        for (String word : dictionary) {
+            wordSet.add(word);
+        }
+
+        // Create a DP array where dp[i] means the substring s[0...i-1] can be formed
+        int n = s.length();
+        boolean[] dp = new boolean[n + 1];
+
+        // Base case: empty string can always be formed
+        dp[0] = true;
+
+        // Iterate through the string s
+        for (int i = 1; i <= n; i++) {
+            // Check all possible previous positions j
+            for (int j = 0; j < i; j++) {
+                // If dp[j] is true and the substring s[j...i-1] is in the wordSet
+                if (dp[j] && wordSet.contains(s.substring(j, i))) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+
+        // The final answer is whether dp[n] is true (i.e., the entire string can be formed)
+        return dp[n];
+    }
+}
