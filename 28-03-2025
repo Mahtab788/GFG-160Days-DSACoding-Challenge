@@ -4,29 +4,38 @@ Your task is to determine the maximum number of activities that a person can com
 
 
 class Solution {
-    public int activitySelection(int[] start, int[] finish) {
-        int n = start.length;
-        int[][] activities = new int[n][2];
-
-        // Store start and finish times together
-        for (int i = 0; i < n; i++) {
-            activities[i][0] = start[i];  // Start time
-            activities[i][1] = finish[i]; // Finish time
+ class pair implements Comparator<pair>{
+        int s;
+        int e;
+        public pair(int s, int e){
+            this.s=s;
+            this.e=e;
         }
-
-        // Sort activities by finish time
-        Arrays.sort(activities, Comparator.comparingInt(a -> a[1]));
-
-        int count = 1; // First activity is always selected
-        int lastFinishTime = activities[0][1];
-
-        // Iterate over remaining activities
-        for (int i = 1; i < n; i++) {
-            if (activities[i][0] >= lastFinishTime) {
-                count++;
-                lastFinishTime = activities[i][1];
+        public int compare(pair o1, pair o2){
+            if(o1.e==o2.e){
+                return o1.s-o2.s;
+            }else return o1.e-o2.e;
+        }
+    }
+    
+    public int activitySelection(int[] start, int[] finish) {
+        int n=start.length;
+        pair arr[]=new pair[n];
+        for(int i=0;i<n;i++){
+            arr[i]=new pair(start[i], finish[i]);
+        }
+        
+        Arrays.sort(arr, new pair(0, 0));
+        
+        int cnt=0;
+        int end=Integer.MIN_VALUE;
+        
+        for(int i=0;i<n;i++){
+            if(end<arr[i].s){
+                cnt++;
+                end=arr[i].e;
             }
         }
-        return count;
+        return cnt;
     }
 }
