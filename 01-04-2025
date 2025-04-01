@@ -1,0 +1,30 @@
+#.Given a connected undirected graph represented by a 2-d adjacency list adj[][],
+where each adj[i] represents the list of vertices connected to vertex i. 
+Perform a Depth First Search (DFS) traversal starting from vertex 0, 
+visiting vertices from left to right as per the given adjacency list, and return a list containing the DFS traversal of the graph.
+
+Note: Do traverse in the same order as they are in the given adjacency list.
+
+class Solution {
+    void f(int ind,ArrayList<Integer> arr, ArrayList<ArrayList<Integer>> adj, boolean vis[]){
+        vis[ind]=true;
+        arr.add(ind);
+        for(int it: adj.get(ind)){
+            if(vis[it]==false){
+                f(it, arr, adj, vis);
+            }
+        }
+    }
+    // Function to return a list containing the DFS traversal of the graph.
+    public ArrayList<Integer> dfs(ArrayList<ArrayList<Integer>> adj) {
+        boolean vis[]=new boolean[adj.size()]; 
+        ArrayList<Integer> arr=new ArrayList<>();
+        for(int i=0;i<adj.size();i++){
+            if(vis[i]==false){
+                f(i,arr, adj,vis);
+            }
+        }
+        return arr;
+        
+    }
+}
