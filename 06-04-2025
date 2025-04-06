@@ -1,0 +1,36 @@
+#.Given a Directed Acyclic Graph (DAG) of V (0 to V-1) vertices and E edges represented as a 2D list of edges[][], 
+where each entry edges[i] = [u, v] denotes an directed edge u -> v. Return topological sort for the given graph.
+
+Topological sorting for Directed Acyclic Graph (DAG) is a linear ordering of vertices such that for every directed edge u -> v, vertex u comes before v in the ordering.
+Note: As there are multiple Topological orders possible, you may return any of them. If your returned Topological sort is correct then the output will be true else false.
+
+class Solution {
+    public static ArrayList<Integer> topoSort(int V, int[][] edges) {
+        ArrayList<ArrayList<Integer>> revadj=new ArrayList<>();
+        ArrayList<Integer> ans=new ArrayList<>();
+        for(int i=0;i<V;i++)
+            revadj.add(new ArrayList<>());
+        for(int i=0;i<edges.length;i++)
+        {
+            int u=edges[i][0];
+            int v=edges[i][1];
+            revadj.get(v).add(u);
+        }
+        int visited[]=new int[V];
+        Arrays.fill(visited,0);
+        for(int i=0;i<V;i++)
+            if(visited[i]==0)
+                solve(visited,revadj,i,ans);
+        return ans;
+    }
+    public static void solve(int visited[], ArrayList<ArrayList<Integer>> revadj, int u, ArrayList<Integer> ans)
+    {
+        for(int w:revadj.get(u))
+        {
+            if(visited[w]==0)
+                solve(visited,revadj,w,ans);
+        }
+        visited[u]=1;
+        ans.add(u);
+    }
+}
