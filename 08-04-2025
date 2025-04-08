@@ -1,0 +1,68 @@
+#.Given an undirected graph with V vertices numbered from 0 to V-1 and E edges, represented by 2d array edges[][], where edges[i]=[u,v] represents the edge between the vertices u and v. 
+Determine whether a specific edge between two vertices (c, d) is a bridge.
+
+Note:
+
+An edge is called a bridge if removing it increases the number of connected components of the graph.
+if there’s only one path between c and d (which is the edge itself), then that edge is a bridge.
+
+class Solution {
+    int time = 0;
+    boolean found = false;
+
+    public boolean isBridge(int V, int[][] edges, int c, int d) {
+        List<List<Integer>> graph = new ArrayList<>();
+        for (int i = 0; i < V; i++) {
+            graph.add(new ArrayList<>());
+        }
+
+        // Build adjacency list
+        for (int[] edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+            graph.get(u).add(v);
+            graph.get(v).add(u);
+        }
+
+        int[] disc = new int[V]; // discovery times
+        int[] low = new int[V];  // low values
+        boolean[] visited = new boolean[V];
+
+        Arrays.fill(disc, -1);
+        Arrays.fill(low, -1);
+
+        // Run DFS from every unvisited node (handle disconnected graph)
+        for (int i = 0; i < V; i++) {
+            if (!visited[i]) {
+                dfs(i, -1, graph, visited, disc, low, c, d);
+            }
+        }
+
+        return found;
+    }
+
+    private void dfs(int u, int parent, List<List<Integer>> graph,
+                     boolean[] visited, int[] disc, int[] low, int c, int d) {
+        visited[u] = true;
+        disc[u] = low[u] = ++time;
+
+        for (int v : graph.get(u)) {
+            if (v == parent) continue;
+
+            if (!visited[v]) {
+                dfs(v, u, graph, visited, disc, low, c, d);
+                low[u] = Math.min(low[u], low[v]);
+
+                // Check for bridge
+                if (low[v] > disc[u]) {
+                    // It's a bridge — check if it's the edge (c, d)
+                    if ((u == c && v == d) || (u == d && v == c)) {
+                        found = true;
+                    }
+                }
+            } else {
+                low[u] = Math.min(low[u], disc[v]);
+            }
+        }
+    }
+}
