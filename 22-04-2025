@@ -1,0 +1,15 @@
+#.Given a unsorted array arr[] of positive integers having all the numbers occurring exactly twice, except for one number which will occur only once. Find the number occurring only once.
+
+class Solution {
+    public int findUnique(int[] arr) {
+        Arrays.sort(arr);  
+        int i = 0;
+        while (i < arr.length - 1) {
+            if (arr[i] != arr[i + 1]) {
+                return arr[i];
+            }
+            i += 2; 
+        }
+        return arr[arr.length - 1]; 
+    }
+}
