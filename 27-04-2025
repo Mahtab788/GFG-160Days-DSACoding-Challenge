@@ -1,0 +1,11 @@
+#.Given two numbers as strings s1 and s2. Calculate their Product.
+Note: The numbers can be negative and You are not allowed to use any built-in function or convert the strings to integers. 
+There can be zeros in the begining of the numbers. You don't need to specify '+' sign in the begining of positive numbers.
+
+class Solution {
+    public String multiplyStrings(String s1, String s2) {
+        BigInteger b1 = new BigInteger(s1);
+        BigInteger b2 = new BigInteger(s2);
+        return b1.multiply(b2).toString();
+    }
+}
