@@ -1,0 +1,27 @@
+#.Given a Binary Tree, you need to find all the possible paths from the root node to all the leaf nodes of the binary tree.
+
+Note: The paths should be returned such that paths from the left subtree of any node are listed first, followed by paths from the right subtree.
+
+class Solution {
+    
+    public static void findAllPaths(ArrayList<ArrayList<Integer>> ans, ArrayList<Integer> curr, Node root) {
+        if (root == null) return;
+
+        curr.add(root.data);
+        
+        if (root.left == null && root.right == null) {
+            ans.add(new ArrayList<>(curr));
+        } else {
+            findAllPaths(ans, curr, root.left);
+            findAllPaths(ans, curr, root.right);
+        }
+
+        curr.remove(curr.size() - 1);
+    }
+
+    public static ArrayList<ArrayList<Integer>> Paths(Node root) {
+        ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
+        findAllPaths(ans, new ArrayList<>(), root);
+        return ans;
+    }
+}
