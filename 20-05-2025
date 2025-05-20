@@ -1,0 +1,81 @@
+#.Given a binary tree and a target node, determine the minimum time required to burn the entire tree if the target node is set on fire. In one second, 
+the fire spreads from a node to its left child, right child, and parent.
+Note: The tree contains unique values.
+
+class Solution {
+    
+    // Map to track parent of each node
+    private static void markParents(Node root, Map<Node, Node> parentMap) {
+        Queue<Node> queue = new LinkedList<>();
+        queue.offer(root);
+        
+        while (!queue.isEmpty()) {
+            Node current = queue.poll();
+            if (current.left != null) {
+                parentMap.put(current.left, current);
+                queue.offer(current.left);
+            }
+            if (current.right != null) {
+                parentMap.put(current.right, current);
+                queue.offer(current.right);
+            }
+        }
+    }
+
+    private static Node findTarget(Node root, int target) {
+        if (root == null) return null;
+        if (root.data == target) return root;
+        
+        Node left = findTarget(root.left, target);
+        if (left != null) return left;
+        
+        return findTarget(root.right, target);
+    }
+
+    public static int minTime(Node root, int target) {
+        Map<Node, Node> parentMap = new HashMap<>();
+        markParents(root, parentMap);
+
+        Node targetNode = findTarget(root, target);
+
+        Set<Node> visited = new HashSet<>();
+        Queue<Node> queue = new LinkedList<>();
+        queue.offer(targetNode);
+        visited.add(targetNode);
+
+        int time = 0;
+
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            boolean burned = false;
+            
+            for (int i = 0; i < size; i++) {
+                Node current = queue.poll();
+
+                if (current.left != null && !visited.contains(current.left)) {
+                    queue.offer(current.left);
+                    visited.add(current.left);
+                    burned = true;
+                }
+
+                if (current.right != null && !visited.contains(current.right)) {
+                    queue.offer(current.right);
+                    visited.add(current.right);
+                    burned = true;
+                }
+
+                Node parent = parentMap.get(current);
+                if (parent != null && !visited.contains(parent)) {
+                    queue.offer(parent);
+                    visited.add(parent);
+                    burned = true;
+                }
+            }
+            
+            if (burned) time++;
+        }
+
+        return time;
+    }
+}
+ 
