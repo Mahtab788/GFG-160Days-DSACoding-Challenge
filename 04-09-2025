@@ -1,0 +1,24 @@
+#You are given the head of a Singly linked list. You have to reverse every k node in the linked list and return the head of the modified list.
+Note: If the number of nodes is not a multiple of k then the left-out nodes at the end, should be considered as a group and must be reversed.
+class Solution {
+    Node rev(Node head, int k){
+        Node curr = head, forw, prev = null;
+        
+        if(head == null) return head;
+        
+        int z = k;
+        while(curr != null && z > 0){
+            forw = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = forw;
+            z--;
+        }
+        head.next = rev(curr, k);
+        return prev;
+    }
+    public Node reverseKGroup(Node head, int k) {
+        // code here
+        return rev(head, k);
+    }
+}
