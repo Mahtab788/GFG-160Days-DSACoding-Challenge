@@ -1,0 +1,39 @@
+#Given the head of a linked list, determine whether the list contains a loop. If a loop is present, return the number of nodes in the loop, otherwise return 0.
+Note: Internally, pos(1 based index) is used to denote the position of the node that tail's next pointer is connected to. If pos = 0, it means the last node points
+to null, indicating there is no loop. Note that pos is not passed as a parameter.
+class Solution {
+    public Node loop(Node head){
+        Node slow = head;
+        Node fast = head;
+        
+        while(fast != null && null != fast.next){
+            fast = fast.next.next;
+            slow = slow.next;
+            if(fast == slow) return fast;
+        }
+        
+        return null;
+    }
+    public int lengthOfLoop(Node head) {
+        // code here
+        Node inBetween = loop(head);
+        if(inBetween == null) return 0;
+        
+        Node curr = head;
+        
+        while(curr != inBetween){
+            curr = curr.next;
+            inBetween = inBetween.next;
+        }
+        
+        Node start = curr.next;
+        int cnt = 1;
+        
+        while(start != inBetween){
+            start = start.next;
+            cnt += 1;
+        }
+        
+        return cnt;
+    }
+}
